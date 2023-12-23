@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <accessibilityOverrides/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Login View Controller-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="Login" id="Y6W-OH-hqX" customClass="LoginViewController" customModule="practicaiOSAvanzado" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="2WV-HN-v6z" userLabel="UiStackView-ContainerOne">
+                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Fondo-DragoBallZ" translatesAutoresizingMaskIntoConstraints="NO" id="GtJ-ho-A9C">
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="759"/>
+                                    </imageView>
+                                </subviews>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="QbF-RS-md5" userLabel="UIStackView-ContainerTwo">
+                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="X3u-lC-BXk">
+                                        <rect key="frame" x="0.0" y="326.33333333333331" width="393" height="106.33333333333331"/>
+                                        <subviews>
+                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="3QI-dN-HhR" userLabel="emailTextField">
+                                                <rect key="frame" x="0.0" y="0.0" width="393" height="34"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                            </textField>
+                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ONw-Uq-GvH" userLabel="passwordTextField">
+                                                <rect key="frame" x="0.0" y="36" width="393" height="34"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                            </textField>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H1V-Ag-svl" userLabel="Login">
+                                                <rect key="frame" x="0.0" y="72" width="393" height="34.333333333333343"/>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="filled" title="Login"/>
+                                                <connections>
+                                                    <action selector="loginButtonTouchUpInside:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="brw-Kp-fJq"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="2WV-HN-v6z" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="9vo-88-qCZ"/>
+                            <constraint firstItem="QbF-RS-md5" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="Bxw-9U-kHu"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="2WV-HN-v6z" secondAttribute="bottom" id="C60-Ie-SNg"/>
+                            <constraint firstItem="QbF-RS-md5" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="NfL-Rz-043"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="2WV-HN-v6z" secondAttribute="trailing" id="coT-AW-BKj"/>
+                            <constraint firstItem="2WV-HN-v6z" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="etr-Wf-qlP"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="QbF-RS-md5" secondAttribute="trailing" id="fCG-4i-UA4"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="QbF-RS-md5" secondAttribute="bottom" id="n9D-Jx-Fob"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="emailTextField" destination="3QI-dN-HhR" id="c9v-QU-uCe"/>
+                        <outlet property="passwordTextField" destination="ONw-Uq-GvH" id="crq-E7-ZhA"/>
+                        <segue destination="x83-bD-hXi" kind="show" identifier="LoginToHerosListSegue" id="wRf-az-GCZ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="88" y="-34"/>
+        </scene>
+        <!--HerosList-->
+        <scene sceneID="x3F-LH-heY">
+            <objects>
+                <viewControllerPlaceholder storyboardIdentifier="LoginToHerosList" storyboardName="HerosList" referencedIdentifier="HerosList" id="x83-bD-hXi" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="TTb-Lg-aYX"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="h4j-Yx-4Cn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="636" y="-357"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="Fondo-DragoBallZ" width="3240" height="5760"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
