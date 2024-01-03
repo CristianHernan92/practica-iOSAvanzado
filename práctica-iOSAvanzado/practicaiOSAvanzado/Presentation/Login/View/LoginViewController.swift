@@ -1,7 +1,7 @@
 import UIKit
 
-protocol LoginViewControllerProtocol:AnyObject {
-    func navitateToHeroListViewController()
+protocol LoginViewControllerDelegate:AnyObject {
+    func navitateToHeroList()
 }
 
 final class LoginViewController:UIViewController{
@@ -11,18 +11,21 @@ final class LoginViewController:UIViewController{
     @IBOutlet private weak var passwordTextField: UITextField!
     @IBOutlet private weak var emailTextField: UITextField!
     @IBAction private func loginButtonTouchUpInside(_ sender: UIButton) {
-        guard let email=self.emailTextField.text,let password=self.passwordTextField.text else {
+        guard let email=self.emailTextField.text,!email.isEmpty,let password=self.passwordTextField.text,!password.isEmpty else {
             return
         }
         viewModel?.onLoginButtonClicked(email: email, password: password)
     }
     
+    override func viewDidLoad() {
+        navigationController?.setNavigationBarHidden(true, animated: true)
+    }
 }
 
-extension LoginViewController: LoginViewControllerProtocol{
-    func navitateToHeroListViewController(){
+extension LoginViewController: LoginViewControllerDelegate{
+    func navitateToHeroList(){
         DispatchQueue.main.async {
-            self.performSegue(withIdentifier: "LoginToHerosListSegue", sender: nil)
+            self.navigationController?.popViewController(animated: true)
         }
     }
 }

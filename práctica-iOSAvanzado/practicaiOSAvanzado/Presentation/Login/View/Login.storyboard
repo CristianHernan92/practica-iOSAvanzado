@@ -12,7 +12,7 @@
         <!--Login View Controller-->
         <scene sceneID="s0d-6b-0kx">
             <objects>
-                <viewController storyboardIdentifier="Login" id="Y6W-OH-hqX" customClass="LoginViewController" customModule="practicaiOSAvanzado" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginStoryboard" id="Y6W-OH-hqX" customClass="LoginViewController" customModule="practicaiOSAvanzado" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -70,22 +70,11 @@
                     <connections>
                         <outlet property="emailTextField" destination="3QI-dN-HhR" id="c9v-QU-uCe"/>
                         <outlet property="passwordTextField" destination="ONw-Uq-GvH" id="crq-E7-ZhA"/>
-                        <segue destination="x83-bD-hXi" kind="show" identifier="LoginToHerosListSegue" id="wRf-az-GCZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="88" y="-34"/>
-        </scene>
-        <!--HerosList-->
-        <scene sceneID="x3F-LH-heY">
-            <objects>
-                <viewControllerPlaceholder storyboardIdentifier="LoginToHerosList" storyboardName="HerosList" referencedIdentifier="HerosList" id="x83-bD-hXi" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="TTb-Lg-aYX"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="h4j-Yx-4Cn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="636" y="-357"/>
         </scene>
     </scenes>
     <resources>

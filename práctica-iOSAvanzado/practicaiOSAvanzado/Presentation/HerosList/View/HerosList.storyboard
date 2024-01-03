@@ -12,7 +12,7 @@
         <!--Heros List View Controller-->
         <scene sceneID="s0d-6b-0kx">
             <objects>
-                <viewController storyboardIdentifier="HerosList" id="Y6W-OH-hqX" customClass="HerosListViewController" customModule="practicaiOSAvanzado" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="HerosListStoryboard" id="Y6W-OH-hqX" customClass="HerosListViewController" customModule="practicaiOSAvanzado" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -40,10 +40,25 @@
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="is3-0Y-7X7" secondAttribute="bottom" id="Wbr-i7-mHU"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="mapKit" destination="1BA-aS-HfQ" id="ApE-xc-Xg5"/>
+                        <outlet property="tableView" destination="cb4-hE-TKl" id="O1b-I1-dfm"/>
+                        <segue destination="9TZ-zu-xMA" kind="show" identifier="HerosListToLoginSegue" id="5sK-7d-len"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="125" y="-34"/>
+        </scene>
+        <!--LoginStoryboard-->
+        <scene sceneID="wyt-Ox-bDM">
+            <objects>
+                <viewControllerPlaceholder storyboardIdentifier="LoginReferenceForHerosList" storyboardName="Login" referencedIdentifier="LoginStoryboard" id="9TZ-zu-xMA" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="Y93-JD-vig"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0Sb-lJ-chW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="873" y="-354"/>
         </scene>
     </scenes>
     <resources>

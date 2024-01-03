@@ -8,15 +8,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
-        //keychain, dragonballznetwork y el viewmodel para el loginviewcontroller
+        //keychain, network, coredata y el viewmodel para el heroslistviewcontroller
         let keychain = Keychain()
-        let dragonBallZNetwork = DragonBallZNetwork(keychain: keychain)
-        let loginViewModel = LoginViewModel(dragonBallZNetwork: dragonBallZNetwork)
+        let dataBase = DataBase()
+        let dragonBallZNetwork = DragonBallZNetwork(keychain: keychain,dataBase: dataBase)
+        let herosListViewModel = HerosListViewModel(
+            dragonBallZNetwork: dragonBallZNetwork,
+            keychain: keychain,
+            dataBase: dataBase
+        )
         
-        let storyboard = UIStoryboard(name: "Login", bundle: nil)
-        let rootViewController = storyboard.instantiateViewController(withIdentifier: "Login") as? LoginViewController
-        rootViewController?.viewModel = loginViewModel
-        loginViewModel.viewController = rootViewController
+        let storyboard = UIStoryboard(name: "HerosList", bundle: nil)
+        let rootViewController = storyboard.instantiateViewController(withIdentifier: "HerosListStoryboard") as? HerosListViewController
+        herosListViewModel.viewController = rootViewController
+        rootViewController?.delegate = herosListViewModel
         
         window = UIWindow(windowScene: windowScene)
         window?.rootViewController = UINavigationController(rootViewController: rootViewController ?? UIViewController())

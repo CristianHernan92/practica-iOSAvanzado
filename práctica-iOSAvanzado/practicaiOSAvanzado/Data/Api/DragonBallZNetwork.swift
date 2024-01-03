@@ -13,7 +13,7 @@ enum NetworkError:Error,Equatable {
 
 protocol DragonBallZNetworkProtocol {
     func login (email: String, password: String, completion: @escaping (NetworkError?)-> Void )
-    func getHeroesList (completion: @escaping (Heroes,NetworkError?) -> Void )
+    func getHeroesList (completion: @escaping (Heros,NetworkError?) -> Void )
 }
 
 final class DragonBallZNetwork{
@@ -21,9 +21,12 @@ final class DragonBallZNetwork{
     private let session = URLSession.shared
     //keychain
     private let keychain:Keychain
+    //coredata
+    private let dataBase:DataBase
     
-    init(keychain: Keychain) {
+    init(keychain: Keychain,dataBase:DataBase) {
         self.keychain = keychain
+        self.dataBase = dataBase
     }
 }
 
@@ -86,7 +89,7 @@ extension DragonBallZNetwork: DragonBallZNetworkProtocol{
     }
     
     //heroes list
-    func getHeroesList (completion: @escaping (Heroes,NetworkError?) -> Void ){
+    func getHeroesList (completion: @escaping (Heros,NetworkError?) -> Void){
         guard let token = keychain.getToken() else{
             completion([],NetworkError.noToken)
             return
@@ -111,7 +114,7 @@ extension DragonBallZNetwork: DragonBallZNetworkProtocol{
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
         //3)comenzamos el llamado a la request
-        let task = session.dataTask(with: request) { data, response, error in
+        let task = session.dataTask(with: request) { [weak self] data, response, error in
             
             //verificamos que no hay habido ningún error en la llamada
             guard error==nil else {
@@ -132,11 +135,12 @@ extension DragonBallZNetwork: DragonBallZNetworkProtocol{
             }
             
             //se intenta decodificar "[Hero]"
-            guard let heroes = try? JSONDecoder().decode(Heroes.self, from: data) else {
+            guard let heroes = try? JSONDecoder().decode(Heros.self, from: data) else {
                 completion([],NetworkError.decodingFailed)
                 return
             }
             
+            self?.dataBase.saveHeros(heros: heroes)
             completion(heroes,nil)
         }
         task.resume()
