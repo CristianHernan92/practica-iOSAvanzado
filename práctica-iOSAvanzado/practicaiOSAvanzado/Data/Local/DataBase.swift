@@ -1,63 +1,107 @@
 import UIKit
 import CoreData
+import MapKit.MKUserLocation
 
 protocol DataBaseProtocol{
-    func saveHeros(heros: Heros)
-    func getHeros()->Heros?
+    func saveHero(name:String,detail:String,image:UIImage)
+    func getAllHerosEntities() -> [HeroEntity]?
+    func deleteAllHerosEntities()
+    func saveHeroAnnotation(title:String,subtitle:String,image:UIImage,latitud:Double,longitud:Double)
+    func getAllHerosAnnotationsEntities() -> [HeroAnnotationEntity]?
+    func deleteAllHerosAnnotationsEntities()
+    func saveContext()
 }
 
-final class DataBase{
-    private var context:NSManagedObjectContext?
-    init(){
-        DispatchQueue.main.async {
-            self.context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
-        }
+final class DataBase {
+    private weak var mainContext: NSManagedObjectContext?
+    init(context: NSManagedObjectContext?) {
+        self.mainContext = context
+    }
+    private var context: NSManagedObjectContext? {
+        return mainContext
     }
 }
+
 
 extension DataBase:DataBaseProtocol{
     
-    func saveHeros(heros: Heros) {
-        guard let context,let entityHero = NSEntityDescription.entity(forEntityName: "Heroe", in: context)
+    //hero
+    
+    func saveHero(name:String,detail:String,image:UIImage) {
+        guard let context,let entity = NSEntityDescription.entity(forEntityName: "HeroEntity", in: context)
         else {return}
-        
-        heros.forEach{ hero in
-            let heroe = NSManagedObject(entity: entityHero, insertInto: context)
-            heroe.setValue(hero.id, forKey: "id")
-            heroe.setValue(hero.name, forKey: "name")
-            heroe.setValue(hero.description, forKey: "heroDescription")
-            heroe.setValue(hero.favorite, forKey: "favorite")
-            heroe.setValue(hero.photo.absoluteString, forKey: "imageURL")
-        }
-        try? context.save()
+        let heroEntity = NSManagedObject(entity: entity, insertInto: context)
+        heroEntity.setValue(name, forKey: "name")
+        heroEntity.setValue(detail, forKey: "detail")
+        heroEntity.setValue(image, forKey: "image")
     }
     
-    func getHeros() -> Heros? {
-        let heroFetch = NSFetchRequest<Heroe>(entityName: "Heroe")
-        guard let context, let heroesResult = try? context.fetch(heroFetch)
-        else{ return [] }
+    func getAllHerosEntities() -> [HeroEntity]? {
+        let fetch = NSFetchRequest<HeroEntity>(entityName: "HeroEntity")
+        guard let context, let fetchResult = try? context.fetch(fetch)
+        else{ return nil }
         
-        var heroes:Heros=[]
-        heroesResult.forEach{ heroe in
-            heroes.append(Hero(
-                id: heroe.id ?? "",
-                name: heroe.name ?? "",
-                description: heroe.heroDescription ?? "",
-                photo: URL(string: heroe.imageURL ?? "")!,
-                favorite: heroe.favorite))
+        var herosEntities:[HeroEntity]=[]
+        fetchResult.forEach{ heroEntity in
+            herosEntities.append(heroEntity)
         }
-        return heroes
+        return herosEntities
     }
     
-    func deleteHeros(){
-        let heroFetch = NSFetchRequest<Heroe>(entityName: "Heroe")
-        guard let context,let heroesResult = try? context.fetch(heroFetch)
+    func deleteAllHerosEntities(){
+        let fetch = NSFetchRequest<HeroEntity>(entityName: "HeroEntity")
+        guard let context,let fetchResult = try? context.fetch(fetch)
         else {return}
         
-        heroesResult.forEach{ hero in
-            context.delete(hero)
+        fetchResult.forEach{ heroEntity in
+            context.delete(heroEntity)
+        }
+    }
+    
+    //hero annotation entity
+    
+    func saveHeroAnnotation(title:String,subtitle:String,image:UIImage,latitud:Double,longitud:Double) {
+        guard let context,let entity = NSEntityDescription.entity(forEntityName: "HeroAnnotationEntity", in: context)
+        else {return}
+        let heroAnnotationEntity = NSManagedObject(entity: entity, insertInto: context)
+        heroAnnotationEntity.setValue(title, forKey: "title")
+        heroAnnotationEntity.setValue(subtitle, forKey: "subtitle")
+        heroAnnotationEntity.setValue(image, forKey: "image")
+        heroAnnotationEntity.setValue(longitud, forKey: "longitud")
+        heroAnnotationEntity.setValue(latitud, forKey: "latitud")
+    }
+    
+    func getAllHerosAnnotationsEntities() -> [HeroAnnotationEntity]? {
+        let fetch = NSFetchRequest<HeroAnnotationEntity>(entityName: "HeroAnnotationEntity")
+        guard let context, let fetchResult = try? context.fetch(fetch)
+        else{ return nil }
+        
+        var herosAnnotationsEntities:[HeroAnnotationEntity]=[]
+        fetchResult.forEach{ heroAnnotationEntity in
+            herosAnnotationsEntities.append(heroAnnotationEntity)
+        }
+        return herosAnnotationsEntities
+    }
+    
+    func deleteAllHerosAnnotationsEntities(){
+        let fetch = NSFetchRequest<HeroAnnotationEntity>(entityName: "HeroAnnotationEntity")
+        guard let context,let fetchResult = try? context.fetch(fetch)
+        else {return}
+        
+        fetchResult.forEach{ heroAnnotationEntity in
+            context.delete(heroAnnotationEntity)
+        }
+    }
+    
+    func saveContext() {
+        guard let context else {return}
+        do {
+            try context.save()
+        } catch let error as NSError {
+            print("Error al guardar en CoreData: \(error.localizedDescription)")
+            print("Detalles del error: \(error.userInfo)")
         }
         
-        try? context.save()
     }
+    
 }

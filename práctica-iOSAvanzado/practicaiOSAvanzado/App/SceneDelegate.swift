@@ -9,9 +9,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         //keychain, network, coredata y el viewmodel para el heroslistviewcontroller
-        let keychain = Keychain()
-        let dataBase = DataBase()
-        let dragonBallZNetwork = DragonBallZNetwork(keychain: keychain,dataBase: dataBase)
+        let keychain:KeychainProtocol = Keychain()
+        let dataBase:DataBaseProtocol = DataBase(context: (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext)
+        let dragonBallZNetwork: DragonBallZNetworkProtocol = DragonBallZNetwork(keychain: keychain)
         let herosListViewModel = HerosListViewModel(
             dragonBallZNetwork: dragonBallZNetwork,
             keychain: keychain,
@@ -21,7 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let storyboard = UIStoryboard(name: "HerosList", bundle: nil)
         let rootViewController = storyboard.instantiateViewController(withIdentifier: "HerosListStoryboard") as? HerosListViewController
         herosListViewModel.viewController = rootViewController
-        rootViewController?.delegate = herosListViewModel
+        rootViewController?.viewModel = herosListViewModel
         
         window = UIWindow(windowScene: windowScene)
         window?.rootViewController = UINavigationController(rootViewController: rootViewController ?? UIViewController())

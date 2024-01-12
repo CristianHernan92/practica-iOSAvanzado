@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22522" systemVersion="23C71" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="Hero">
-    <entity name="Heroe" representedClassName="Heroe" syncable="YES" codeGenerationType="class">
-        <attribute name="favorite" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="heroDescription" attributeType="String"/>
-        <attribute name="id" optional="YES" attributeType="String"/>
-        <attribute name="imageURL" attributeType="String"/>
+    <entity name="HeroAnnotationEntity" representedClassName="HeroAnnotationEntity" syncable="YES">
+        <attribute name="image" attributeType="Transformable" valueTransformerName="UIImageTransformer" customClassName="UIImage"/>
+        <attribute name="latitud" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="longitud" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="subtitle" attributeType="String"/>
+        <attribute name="title" attributeType="String"/>
+    </entity>
+    <entity name="HeroEntity" representedClassName="HeroEntity" syncable="YES">
+        <attribute name="detail" attributeType="String"/>
+        <attribute name="image" attributeType="Transformable" valueTransformerName="UIImageTransformer" customClassName="UIImage"/>
+        <attribute name="latitud" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="longitud" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String"/>
     </entity>
 </model>

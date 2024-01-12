@@ -41,7 +41,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="mapKit" destination="1BA-aS-HfQ" id="ApE-xc-Xg5"/>
+                        <outlet property="mapView" destination="1BA-aS-HfQ" id="ApE-xc-Xg5"/>
                         <outlet property="tableView" destination="cb4-hE-TKl" id="O1b-I1-dfm"/>
                         <segue destination="9TZ-zu-xMA" kind="show" identifier="HerosListToLoginSegue" id="5sK-7d-len"/>
                     </connections>

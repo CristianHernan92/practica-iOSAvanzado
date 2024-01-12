@@ -2,18 +2,18 @@ import Foundation
 
 protocol LoginViewModelProtocol{
     func onLoginButtonClicked(email:String,password:String)
-    var getHerosListViewModel:HerosListViewModel{get}
+    var getHerosListViewModel:HerosListViewModelProtocol{get}
 }
 
 final class LoginViewModel{
     weak var viewController:LoginViewControllerDelegate? = nil
     
-    private let dragonBallZNetwork:DragonBallZNetwork
-    private let keychain:Keychain
-    private let dataBase:DataBase
-    private let herosListViewModel: HerosListViewModel
+    private let dragonBallZNetwork:DragonBallZNetworkProtocol
+    private let keychain:KeychainProtocol
+    private let dataBase:DataBaseProtocol
+    private let herosListViewModel: HerosListViewModelProtocol
     
-    init(dragonBallZNetwork: DragonBallZNetwork, keychain: Keychain, dataBase: DataBase) {
+    init(dragonBallZNetwork: DragonBallZNetworkProtocol, keychain: KeychainProtocol, dataBase: DataBaseProtocol) {
         self.dragonBallZNetwork = dragonBallZNetwork
         self.keychain = keychain
         self.dataBase = dataBase
@@ -45,7 +45,7 @@ extension LoginViewModel:LoginViewModelProtocol{
             self.viewController?.navitateToHeroList()
         }
     }
-    var getHerosListViewModel: HerosListViewModel{
+    var getHerosListViewModel: HerosListViewModelProtocol{
         herosListViewModel
     }
 }
