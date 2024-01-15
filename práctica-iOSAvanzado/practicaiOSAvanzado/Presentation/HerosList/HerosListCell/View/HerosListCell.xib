@@ -18,22 +18,22 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="cPG-cf-9ls" userLabel="UIStack-Container">
-                        <rect key="frame" x="5" y="5" width="383" height="132"/>
+                        <rect key="frame" x="5" y="5" width="383.33333333333331" height="132"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="j0E-w3-LnO" userLabel="heroImage">
                                 <rect key="frame" x="0.0" y="0.0" width="191.66666666666666" height="132"/>
                             </imageView>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="tDE-Lq-oDR">
-                                <rect key="frame" x="191.66666666666663" y="0.0" width="191.33333333333337" height="132"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="tDE-Lq-oDR">
+                                <rect key="frame" x="191.66666666666669" y="0.0" width="191.66666666666669" height="132"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x3R-U4-rWO" userLabel="heroName">
-                                        <rect key="frame" x="0.0" y="0.0" width="191.33333333333334" height="47.666666666666664"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="191.66666666666666" height="50"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="3ES-2Y-HuI" userLabel="heroDescription">
-                                        <rect key="frame" x="0.0" y="47.666666666666664" width="191.33333333333334" height="84.333333333333343"/>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="3ES-2Y-HuI" userLabel="heroDescription">
+                                        <rect key="frame" x="0.0" y="50" width="191.66666666666666" height="82"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <color key="textColor" systemColor="labelColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -45,10 +45,10 @@
                     </stackView>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="trailing" secondItem="cPG-cf-9ls" secondAttribute="trailing" constant="5" id="6V7-gK-VqJ"/>
-                    <constraint firstItem="cPG-cf-9ls" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="XaR-x9-H8U"/>
-                    <constraint firstItem="cPG-cf-9ls" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="ZCy-Bm-gn7"/>
-                    <constraint firstAttribute="bottom" secondItem="cPG-cf-9ls" secondAttribute="bottom" constant="5" id="irC-ud-8tb"/>
+                    <constraint firstItem="cPG-cf-9ls" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="5Al-Zy-nbz"/>
+                    <constraint firstAttribute="bottom" secondItem="cPG-cf-9ls" secondAttribute="bottom" constant="5" id="7tO-ye-HcC"/>
+                    <constraint firstItem="cPG-cf-9ls" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="d1d-nx-Wlj"/>
+                    <constraint firstAttribute="trailing" secondItem="cPG-cf-9ls" secondAttribute="trailing" constant="4.6699999999999999" id="l2i-95-MlI"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>

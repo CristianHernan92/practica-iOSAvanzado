@@ -1,7 +1,7 @@
 import Foundation
 import MapKit.MKUserLocation
 
-typealias HeroAnnotations = [HeroAnnotation]
+typealias HerosAnnotations = [HeroAnnotation]
 
 final class HeroAnnotation:NSObject,MKAnnotation{
     let title: String?

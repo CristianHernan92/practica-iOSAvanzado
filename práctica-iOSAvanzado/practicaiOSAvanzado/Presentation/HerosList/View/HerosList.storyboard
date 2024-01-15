@@ -44,11 +44,22 @@
                         <outlet property="mapView" destination="1BA-aS-HfQ" id="ApE-xc-Xg5"/>
                         <outlet property="tableView" destination="cb4-hE-TKl" id="O1b-I1-dfm"/>
                         <segue destination="9TZ-zu-xMA" kind="show" identifier="HerosListToLoginSegue" id="5sK-7d-len"/>
+                        <segue destination="wG9-2g-N4n" kind="show" identifier="HerosListToHeroDetailSegue" id="il9-oS-a8q"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="125" y="-34"/>
+        </scene>
+        <!--HeroDetailStoryboard-->
+        <scene sceneID="1nc-vS-lAz">
+            <objects>
+                <viewControllerPlaceholder storyboardName="HeroDetail" referencedIdentifier="HeroDetailStoryboard" id="wG9-2g-N4n" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="hZy-sj-7B7"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9Ng-G5-tH8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="895" y="224"/>
         </scene>
         <!--LoginStoryboard-->
         <scene sceneID="wyt-Ox-bDM">

@@ -2,20 +2,18 @@ import Foundation
 import UIKit.UIImage
 import MapKit.MKUserLocation
 
-enum ViewState{
-    case ready
-}
-
 protocol HerosListViewModelProtocol{
-    func on(_ state:ViewState)
-    func getHeroData(index:Int)->(heroName:String,heroDescription:String,heroImage:UIImage)
-    var getHerosCount: Int {get}
+    func viewReady()
+    func cellDidSelect(indexPath: Int)
+    func annotationDidSelect(annotationView: MKAnnotationView)
+    func getCellHeroData(index:Int) -> CellHeroData
+    var getCellHeroesDataCount: Int {get}
     var getLoginViewModel:LoginViewModel {get}
 }
 
 final class HerosListViewModel{
     weak var viewController:HerosListViewControllerDelegate? = nil
-    private var herosData:[(heroName:String,heroDescription:String,heroImage:UIImage)]? = nil
+    private var cellHeroesData:CellHeroesData? = nil
     private let dragonBallZNetwork:DragonBallZNetworkProtocol
     private let keychain:KeychainProtocol
     private let dataBase:DataBaseProtocol
@@ -54,24 +52,6 @@ final class HerosListViewModel{
         task.resume()
     }
     
-    func saveHeroInCoreData(name:String,detail:String,image: UIImage){
-        self.dataBase.saveHero(name: name, detail: detail, image: image)
-    }
-    
-    func saveHeroAnnotationInCoreData(title:String,subtitle:String,image:UIImage,latitud:Double,longitud:Double){
-        self.dataBase.saveHeroAnnotation(title: title, subtitle: subtitle, image: image, latitud: latitud, longitud: longitud)
-    }
-    
-    func createHeroAnnotation(title:String,subtitle:String, coordinate: CLLocationCoordinate2D,image: UIImage)->HeroAnnotation{
-        let heroAnnotation = HeroAnnotation(
-            title: title,
-            subtitle: subtitle,
-            coordinate: coordinate,
-            image: image
-        )
-        return heroAnnotation
-    }
-    
     func getHeroLocationsFromApi(heroId:String,completion: @escaping(HeroLocations)->Void){
         self.dragonBallZNetwork.getHeroLocations(heroId: heroId) { data, error in
             defer{
@@ -104,27 +84,33 @@ final class HerosListViewModel{
     
     func goWithApis() {
         DispatchQueue.global(qos: .default).async {
-            self.herosData=[]
+            var herosAnnotations: HerosAnnotations = []
+            self.cellHeroesData = []
+            
             self.getHerosFromApi { heros in
                 let group = DispatchGroup()
                 heros.forEach { hero in
                     group.enter()
                     self.getImageFrom(url: hero.photo) { image in
-                        self.herosData?.append((heroName: hero.name, heroDescription: hero.description, heroImage: image))
-                        self.saveHeroInCoreData(name: hero.name, detail: hero.description, image: image)
+                        self.cellHeroesData?.append(CellHeroData(name: hero.name, description: hero.description, image: image))
                         
                         self.getHeroLocationsFromApi(heroId: hero.id) { heroLocations in
-                            heroLocations.forEach { heroLocation in
-                                self.viewController?.addAnnotationToMapView(heroAnnotation: HeroAnnotation(title: hero.name, subtitle: hero.description, coordinate: CLLocationCoordinate2D(latitude: Double(heroLocation.latitud) ?? 0, longitude: Double(heroLocation.longitud) ?? 0), image: image))
-                                self.saveHeroAnnotationInCoreData(title: hero.name, subtitle: hero.description, image: image, latitud: Double(heroLocation.latitud) ?? 0, longitud: Double(heroLocation.longitud) ?? 0)
+                            heroLocations.forEach{ heroLocation in
+                                herosAnnotations.append(HeroAnnotation(title: hero.name, subtitle: hero.description, coordinate: CLLocationCoordinate2D(latitude: Double(heroLocation.latitud) ?? 0, longitude: Double(heroLocation.longitud) ?? 0), image: image))
                             }
                             group.leave()
                         }
                     }
                 }
+                
                 group.notify(queue: .main) {
-                    //cuando termina todo confirmamos el guardado en la base de datos y actualizamos la tabla de la vista
+                    //actualizamos la vista
                     self.viewController?.updateTable()
+                    self.viewController?.addAnnotationsToMapView(herosAnnotations: herosAnnotations)
+                    
+                    //guardamos los datos de los heroes y las annotations en el contexto de la base de datos y luego confirmamos el guardado de los datos que están en el contexto
+                    self.dataBase.saveCellHeroesDataToContext(cellHeroesData: self.cellHeroesData ?? [CellHeroData(name: "", description: "", image: UIImage())])
+                    self.dataBase.saveHerosAnnotationsToContext(herosAnnotations: herosAnnotations)
                     self.dataBase.saveContext()
                 }
             }
@@ -132,38 +118,27 @@ final class HerosListViewModel{
     }
 
 
-    func goWithCoreData(herosEntities: [HeroEntity],heroAnnotationsEntities: [HeroAnnotationEntity]){
-        self.herosData=[]
-        
-        herosEntities.forEach{ HeroEntity in
-            self.herosData?.append((heroName: HeroEntity.name, heroDescription: HeroEntity.detail, heroImage: HeroEntity.image))
-        }
-        
-        heroAnnotationsEntities.forEach{ heroAnnotationEntity in
-            self.viewController?.addAnnotationToMapView(
-                heroAnnotation: HeroAnnotation(
-                    title: heroAnnotationEntity.title,
-                    subtitle: heroAnnotationEntity.subtitle,
-                    coordinate: CLLocationCoordinate2D(latitude: heroAnnotationEntity.latitud, longitude: heroAnnotationEntity.longitud),
-                    image: heroAnnotationEntity.image)
-            )
-        }
+    func goWithCoreData(cellHeroesData: CellHeroesData,herosAnnotations: HerosAnnotations){
+        self.cellHeroesData = cellHeroesData
         
         viewController?.updateTable()
+        viewController?.addAnnotationsToMapView(herosAnnotations: herosAnnotations)
         
-        //eliminamos los datos del contexto para que en la próxima apertura de la aplicación entre por el llamado de las apis para que vuelva a cargar los datos al core data
-        dataBase.deleteAllHerosEntities()
-        dataBase.saveContext()
+        //eliminamos los datos del contexto para que en la próxima apertura de la aplicación entre por el llamado de las apis y vuelva a guardar los datos a la base de datos
+        //dataBase.deleteAllCellHeroesData()
+        //dataBase.saveContext()
     }
-    
-    func viewReady() {
+}
+
+extension HerosListViewModel:HerosListViewModelProtocol{
+    func viewReady(){
         //si directamente no hay token quiere decir que el usuario no se logeo y lo mandamos a la página de logeo
         if keychain.getToken() != nil{
             //si heros es igual a nil,es decir, si el usuario cerro y volvio a abrir la aplicación y no que regresó (pop) a la vista, verificamos si hay datos en el CoreData y tomamos los datos de ahí, sino llamamos a las apis y desde ellas guardamos luego los datos en el CoreData
-            if (self.herosData == nil){
-                if let herosEntities = dataBase.getAllHerosEntities(), !herosEntities.isEmpty,
-                   let heroAnnotationsEntities = dataBase.getAllHerosAnnotationsEntities(), !heroAnnotationsEntities.isEmpty{
-                    goWithCoreData(herosEntities: herosEntities, heroAnnotationsEntities: heroAnnotationsEntities)
+            if (self.cellHeroesData == nil){
+                if let cellHeroesData = dataBase.getAllCellHeroesData(), !cellHeroesData.isEmpty,
+                   let herosAnnotations = dataBase.getAllHerosAnnotations(), !herosAnnotations.isEmpty{
+                    goWithCoreData(cellHeroesData: cellHeroesData, herosAnnotations: herosAnnotations)
                 }
                 else{
                     goWithApis()
@@ -174,19 +149,17 @@ final class HerosListViewModel{
             viewController?.navigateToLogin()
         }
     }
-}
-
-extension HerosListViewModel:HerosListViewModelProtocol{
-    func on(_ state: ViewState) {
-        switch state{
-            case .ready: viewReady()
-        }
+    func cellDidSelect(indexPath:Int){
+        viewController?.navigateToHeroDetail(cellHeroData: self.getCellHeroData(index: indexPath))
     }
-    func getHeroData(index:Int)->(heroName:String,heroDescription:String,heroImage:UIImage){
-        self.herosData?[index] ?? (heroName:"",heroDescription:"",heroImage:UIImage())
+    func annotationDidSelect(annotationView: MKAnnotationView){
+        viewController?.navigateToHeroDetail(cellHeroData: CellHeroData(name: (annotationView.annotation?.title ?? "") ?? "", description: (annotationView.annotation?.subtitle ?? "") ?? "", image: annotationView.image ?? UIImage()))
     }
-    var getHerosCount: Int{
-        self.herosData?.count ?? 0
+    func getCellHeroData(index:Int) -> CellHeroData{
+        self.cellHeroesData?[index] ?? CellHeroData(name: "", description: "", image: UIImage())
+    }
+    var getCellHeroesDataCount: Int{
+        self.cellHeroesData?.count ?? 0
     }
     var getLoginViewModel: LoginViewModel{
         loginViewModel

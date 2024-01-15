@@ -3,8 +3,9 @@ import MapKit
 
 protocol HerosListViewControllerDelegate:AnyObject{
     func navigateToLogin()
+    func navigateToHeroDetail(cellHeroData: CellHeroData)
     func updateTable()
-    func addAnnotationToMapView(heroAnnotation:HeroAnnotation)
+    func addAnnotationsToMapView(herosAnnotations:HerosAnnotations)
 }
 
 final class HerosListViewController:UIViewController{
@@ -19,16 +20,7 @@ final class HerosListViewController:UIViewController{
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        viewModel?.on(.ready)
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard segue.identifier == "HerosListToLoginSegue",
-              let loginViewController=segue.destination as? LoginViewController
-        else {return}
-        let loginViewModel = viewModel?.getLoginViewModel
-        loginViewModel?.viewController = loginViewController
-        loginViewController.viewModel = loginViewModel
+        viewModel?.viewReady()
     }
     
     func initView(){
@@ -36,6 +28,31 @@ final class HerosListViewController:UIViewController{
         tableView.delegate = self
         tableView.dataSource = self
         mapView.delegate = self
+    }
+    
+    func prepareForLoginSegue(segue: UIStoryboardSegue){
+        guard let loginViewController=segue.destination as? LoginViewController
+        else {return}
+        let loginViewModel = viewModel?.getLoginViewModel
+        loginViewModel?.viewController = loginViewController
+        loginViewController.viewModel = loginViewModel
+    }
+    func prepareForHeroDetailSegue(segue: UIStoryboardSegue, cellHeroData: CellHeroData){
+        guard let heroDetailViewController=segue.destination as? HeroDetailViewController
+        else {return}
+        let heroDetailViewModel = HeroDetailViewModel(heroTitle: cellHeroData.name, heroDetail: cellHeroData.description, heroImage: cellHeroData.image)
+        heroDetailViewModel.viewController = heroDetailViewController
+        heroDetailViewController.viewModel = heroDetailViewModel
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier{
+        case "HerosListToLoginSegue":
+            self.prepareForLoginSegue(segue: segue)
+        case "HerosListToHeroDetailSegue":
+            self.prepareForHeroDetailSegue(segue: segue, cellHeroData: sender as? CellHeroData ?? CellHeroData(name: "", description: "", image: UIImage()))
+        default: return
+        }
     }
 }
 
@@ -50,21 +67,22 @@ extension HerosListViewController: UITableViewDelegate,UITableViewDataSource{
     private func cell(_ indexPath: IndexPath) -> UITableViewCell{
         guard
             let herosListTableViewCell = tableView.dequeueReusableCell(withIdentifier: "HerosListCell") as? HerosListCell,
-            let heroData = viewModel?.getHeroData(index: indexPath.row)
+            let cellHeroData = viewModel?.getCellHeroData(index: indexPath.row)
         else{
             return HerosListCell()
         }
+        
         herosListTableViewCell.updateView(
-            heroImage: heroData.heroImage,
-            heroTitle: heroData.heroName,
-            heroDescription: heroData.heroDescription
+            heroImage: cellHeroData.image,
+            heroTitle: cellHeroData.name,
+            heroDescription: cellHeroData.description
         )
         
         return herosListTableViewCell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel?.getHerosCount ?? 0
+        viewModel?.getCellHeroesDataCount ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -74,10 +92,18 @@ extension HerosListViewController: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         heightCell()
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        viewModel?.cellDidSelect(indexPath: indexPath.row)
+    }
 }
 
 //extension for mapview
 extension HerosListViewController: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        viewModel?.annotationDidSelect(annotationView: view)
+    }
+    
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard let heroAnnotation = annotation as? HeroAnnotation else {
             return MKAnnotationView()
@@ -94,7 +120,7 @@ extension HerosListViewController: MKMapViewDelegate {
         }
 
         // Redimensiona la imagen al tamaño deseado
-        let targetSize = CGSize(width: 45, height: 45)
+        let targetSize = CGSize(width: 80, height: 80)
         let resizedImage = resizeImage(heroAnnotation.image, targetSize: targetSize)
 
         // Aplica una máscara de esquinas redondeadas a la imagen
@@ -151,15 +177,21 @@ extension HerosListViewController:HerosListViewControllerDelegate{
             self.performSegue(withIdentifier: "HerosListToLoginSegue", sender: (self))
         }
     }
+    func navigateToHeroDetail(cellHeroData: CellHeroData) {
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: "HerosListToHeroDetailSegue", sender: cellHeroData)
+        }
+    }
     func updateTable() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
     }
-    
-    func addAnnotationToMapView(heroAnnotation:HeroAnnotation){
+    func addAnnotationsToMapView(herosAnnotations:HerosAnnotations){
         DispatchQueue.main.async {
+            herosAnnotations.forEach{ heroAnnotation in
                 self.mapView.addAnnotation(heroAnnotation)
+            }
         }
     }
 }
