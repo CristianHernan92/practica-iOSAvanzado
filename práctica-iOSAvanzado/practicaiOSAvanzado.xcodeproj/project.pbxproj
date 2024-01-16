@@ -239,10 +239,10 @@
 		F1CDFF5E2B34A9BE00132C85 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
-				F158BDBB2B51B815009903F2 /* HeroDetail */,
 				F1CDFF622B34AA7100132C85 /* LaunchScreen */,
 				F1CDFF8A2B35098800132C85 /* Login */,
 				F1CDFF642B34AA8600132C85 /* HerosList */,
+				F158BDBB2B51B815009903F2 /* HeroDetail */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
