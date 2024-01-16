@@ -3,12 +3,13 @@ import UIKit.UIImage
 import MapKit.MKUserLocation
 
 protocol HerosListViewModelProtocol{
-    func viewReady()
+    func onViewWillApear()
     func cellDidSelect(indexPath: Int)
     func annotationDidSelect(annotationView: MKAnnotationView)
     func getCellHeroData(index:Int) -> CellHeroData
     var getCellHeroesDataCount: Int {get}
     var getLoginViewModel:LoginViewModel {get}
+    func logoutIconButonTouched()
 }
 
 final class HerosListViewModel{
@@ -104,11 +105,12 @@ final class HerosListViewModel{
                 }
                 
                 group.notify(queue: .main) {
-                    //actualizamos la vista
+                    //updates the table view and add anotations to the mapkit
                     self.viewController?.updateTable()
                     self.viewController?.addAnnotationsToMapView(herosAnnotations: herosAnnotations)
                     
-                    //guardamos los datos de los heroes y las annotations en el contexto de la base de datos y luego confirmamos el guardado de los datos que están en el contexto
+                    
+                    //save data in the context of data base and confirm the save of the data i the context
                     self.dataBase.saveCellHeroesDataToContext(cellHeroesData: self.cellHeroesData ?? [CellHeroData(name: "", description: "", image: UIImage())])
                     self.dataBase.saveHerosAnnotationsToContext(herosAnnotations: herosAnnotations)
                     self.dataBase.saveContext()
@@ -124,17 +126,18 @@ final class HerosListViewModel{
         viewController?.updateTable()
         viewController?.addAnnotationsToMapView(herosAnnotations: herosAnnotations)
         
-        //eliminamos los datos del contexto para que en la próxima apertura de la aplicación entre por el llamado de las apis y vuelva a guardar los datos a la base de datos
         //dataBase.deleteAllCellHeroesData()
         //dataBase.saveContext()
     }
 }
 
 extension HerosListViewModel:HerosListViewModelProtocol{
-    func viewReady(){
-        //si directamente no hay token quiere decir que el usuario no se logeo y lo mandamos a la página de logeo
+    func onViewWillApear(){
+        //show navigationBar
+        viewController?.showNavigationBar()
+        
+        //verify keychain
         if keychain.getToken() != nil{
-            //si heros es igual a nil,es decir, si el usuario cerro y volvio a abrir la aplicación y no que regresó (pop) a la vista, verificamos si hay datos en el CoreData y tomamos los datos de ahí, sino llamamos a las apis y desde ellas guardamos luego los datos en el CoreData
             if (self.cellHeroesData == nil){
                 if let cellHeroesData = dataBase.getAllCellHeroesData(), !cellHeroesData.isEmpty,
                    let herosAnnotations = dataBase.getAllHerosAnnotations(), !herosAnnotations.isEmpty{
@@ -163,5 +166,9 @@ extension HerosListViewModel:HerosListViewModelProtocol{
     }
     var getLoginViewModel: LoginViewModel{
         loginViewModel
+    }
+    func logoutIconButonTouched(){
+        keychain.removeToken()
+        viewController?.navigateToLogin()
     }
 }

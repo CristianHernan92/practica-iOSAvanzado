@@ -1,6 +1,7 @@
 import UIKit
 
 protocol LoginViewControllerDelegate:AnyObject {
+    func hideNavigationBar()
     func navitateToHeroList()
 }
 
@@ -10,19 +11,22 @@ final class LoginViewController:UIViewController{
     
     @IBOutlet private weak var passwordTextField: UITextField!
     @IBOutlet private weak var emailTextField: UITextField!
+    
     @IBAction private func loginButtonTouchUpInside(_ sender: UIButton) {
-        guard let email=self.emailTextField.text,!email.isEmpty,let password=self.passwordTextField.text,!password.isEmpty else {
-            return
-        }
-        viewModel?.onLoginButtonClicked(email: email, password: password)
+        viewModel?.onLoginButtonClicked(email: emailTextField.text, password: passwordTextField.text)
     }
     
     override func viewDidLoad() {
-        navigationController?.setNavigationBarHidden(true, animated: true)
+        viewModel?.onViewDidLoad()
     }
 }
 
 extension LoginViewController: LoginViewControllerDelegate{
+    func hideNavigationBar(){
+        DispatchQueue.main.async {
+            self.navigationController?.setNavigationBarHidden(true, animated: true)
+        }
+    }
     func navitateToHeroList(){
         DispatchQueue.main.async {
             self.navigationController?.popViewController(animated: true)

@@ -1,6 +1,5 @@
 import Foundation
 
-//armamos los errores posibles a aparecer
 enum NetworkError:Error,Equatable {
     case unknown
     case malformedUrl
@@ -32,7 +31,6 @@ extension DragonBallZNetwork: DragonBallZNetworkProtocol{
     //login
     func login (email: String, password: String, completion: @escaping (NetworkError?)-> Void ){
             
-            //1)armamos los componentes de la url y mediante ella creamos la url que se le va a pasar al request
             var URLComponents = URLComponents()
             URLComponents.scheme = "https"
             URLComponents.host = "dragonball.keepcoding.education"
@@ -42,7 +40,6 @@ extension DragonBallZNetwork: DragonBallZNetworkProtocol{
                 return
             }
             
-            //2)armamos la request pasandole la url que creamos
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
             let loginstring = String(format: "%@:%@",email,password)
@@ -53,28 +50,23 @@ extension DragonBallZNetwork: DragonBallZNetworkProtocol{
             let base64loginstring = logindata.base64EncodedString()
             request.setValue("Basic \(base64loginstring)", forHTTPHeaderField: "Authorization")
             
-            //3)comenzamos el llamado a la request
         let task = session.dataTask(with: request) { [weak self] data, response, error in
                 
-                //verificamos que no haya ningún error en la llamada
                 guard error == nil else {
                     completion(NetworkError.unknown)
                     return
                 }
                 
-                //nos aseguramos que la llamada haya sido exitosa
                 guard (response as? HTTPURLResponse)?.statusCode == 200 else {
                     completion(NetworkError.statusCode(code: (response as? HTTPURLResponse)?.statusCode))
                     return
                 }
-                
-                //verificamos que haya data
+
                 guard let data else {
                     completion(NetworkError.noData)
                     return
                 }
                 
-                //nos aseguramenos que el dato que vino se decodifique correctamente y lo guardamos en una variable token
                 guard let token = String(data: data, encoding: .utf8) else {
                     completion(NetworkError.decodingFailed)
                     return
@@ -93,7 +85,6 @@ extension DragonBallZNetwork: DragonBallZNetworkProtocol{
             return
         }
         
-        //1)armamos los componentes de la url y mediante ella creamos la url que se le va a pasar al request
         var URLComponents = URLComponents()
         URLComponents.scheme = "https"
         URLComponents.host = "dragonball.keepcoding.education"
@@ -104,35 +95,28 @@ extension DragonBallZNetwork: DragonBallZNetworkProtocol{
         }
         URLComponents.queryItems = [URLQueryItem(name: "name", value: "")]
         
-        
-        //2)armamos la request pasandole la url que creamos
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = URLComponents.query?.data(using: .utf8)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
-        //3)comenzamos el llamado a la request
         let task = session.dataTask(with: request) { data, response, error in
             
-            //verificamos que no haya ningún error en la llamada
             guard error==nil else {
                 completion([],NetworkError.unknown)
                 return
             }
             
-            //nos aseguramos que la llamada haya sido exitosa
             guard (response as? HTTPURLResponse)?.statusCode == 200 else {
                 completion([],NetworkError.statusCode(code: (response as? HTTPURLResponse)?.statusCode))
                 return
             }
-            
-            //verificamos que haya data
+
             guard let data else {
                 completion([],NetworkError.noData)
                 return
             }
             
-            //se intenta decodificar "[Hero]"
             guard let heroes = try? JSONDecoder().decode(Heros.self, from: data) else {
                 completion([],NetworkError.decodingFailed)
                 return
@@ -150,7 +134,6 @@ extension DragonBallZNetwork: DragonBallZNetworkProtocol{
             return
         }
         
-        //1)armamos los componentes de la url y mediante ella creamos la url que se le va a pasar al request
         var URLComponents = URLComponents()
         URLComponents.scheme = "https"
         URLComponents.host = "dragonball.keepcoding.education"
@@ -161,35 +144,28 @@ extension DragonBallZNetwork: DragonBallZNetworkProtocol{
         }
         URLComponents.queryItems = [URLQueryItem(name: "id", value: heroId)]
         
-        
-        //2)armamos la request pasandole la url que creamos
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = URLComponents.query?.data(using: .utf8)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
-        //3)comenzamos el llamado a la request
         let task = session.dataTask(with: request) { data, response, error in
             
-            //verificamos que no haya ningún error en la llamada
             guard error==nil else {
                 completion([],NetworkError.unknown)
                 return
             }
             
-            //nos aseguramos que la llamada haya sido exitosa
             guard (response as? HTTPURLResponse)?.statusCode == 200 else {
                 completion([],NetworkError.statusCode(code: (response as? HTTPURLResponse)?.statusCode))
                 return
             }
             
-            //verificamos que haya data
             guard let data else {
                 completion([],NetworkError.noData)
                 return
             }
             
-            //se intenta decodificar "[Hero]"
             guard let heroeLocations = try? JSONDecoder().decode(HeroLocations.self, from: data) else {
                 completion([],NetworkError.decodingFailed)
                 return

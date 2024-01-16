@@ -1,7 +1,8 @@
 import Foundation
 
 protocol LoginViewModelProtocol{
-    func onLoginButtonClicked(email:String,password:String)
+    func onViewDidLoad()
+    func onLoginButtonClicked(email:String?,password:String?)
     var getHerosListViewModel:HerosListViewModelProtocol{get}
 }
 
@@ -40,9 +41,14 @@ final class LoginViewModel{
 }
 
 extension LoginViewModel:LoginViewModelProtocol{
-    func onLoginButtonClicked(email:String,password:String) {
-        login(email: email, password: password) {
-            self.viewController?.navitateToHeroList()
+    func onViewDidLoad() {
+        viewController?.hideNavigationBar()
+    }
+    func onLoginButtonClicked(email:String?,password:String?) {
+        if let email, let password {
+            login(email: email, password: password) {
+                self.viewController?.navitateToHeroList()
+            }
         }
     }
     var getHerosListViewModel: HerosListViewModelProtocol{

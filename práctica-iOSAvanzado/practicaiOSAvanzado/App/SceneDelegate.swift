@@ -8,7 +8,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
-        //keychain, network, coredata y el viewmodel para el heroslistviewcontroller
+        //keychain, network, coredata and the viewmodel for heroslistviewcontroller
         let keychain:KeychainProtocol = Keychain()
         let dataBase:DataBaseProtocol = DataBase(context: (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext)
         let dragonBallZNetwork: DragonBallZNetworkProtocol = DragonBallZNetwork(keychain: keychain)

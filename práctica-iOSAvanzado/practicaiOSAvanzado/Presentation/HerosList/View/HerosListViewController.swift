@@ -2,6 +2,7 @@ import UIKit
 import MapKit
 
 protocol HerosListViewControllerDelegate:AnyObject{
+    func showNavigationBar()
     func navigateToLogin()
     func navigateToHeroDetail(cellHeroData: CellHeroData)
     func updateTable()
@@ -15,12 +16,12 @@ final class HerosListViewController:UIViewController{
     var viewModel:HerosListViewModelProtocol? = nil
     
     override func viewDidLoad() {
-        navigationController?.navigationBar.backItem?.backBarButtonItem?.isEnabled = false
+        createAndAddLogOutIconButton()
         initView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        viewModel?.viewReady()
+        viewModel?.onViewWillApear()
     }
     
     func initView(){
@@ -28,6 +29,24 @@ final class HerosListViewController:UIViewController{
         tableView.delegate = self
         tableView.dataSource = self
         mapView.delegate = self
+    }
+    
+    func createAndAddLogOutIconButton(){
+        if let iconImage = UIImage(systemName: "power.circle.fill") {
+            let largeSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: 30)
+            let largeIconImage = iconImage.withConfiguration(largeSymbolConfiguration)
+            let iconButton = UIButton(type: .custom)
+            iconButton.setImage(largeIconImage, for: .normal)
+            iconButton.tintColor = UIColor.red
+            iconButton.frame = CGRect(x: 0, y: 0, width: 10, height: 40)
+            iconButton.addTarget(self, action: #selector(logoutIconButonTouchedInside), for: .touchUpInside)
+            let iconBarButtonItem = UIBarButtonItem(customView: iconButton)
+            navigationItem.rightBarButtonItem = iconBarButtonItem
+        }
+    }
+    
+    @objc func logoutIconButonTouchedInside(){
+        viewModel?.logoutIconButonTouched()
     }
     
     func prepareForLoginSegue(segue: UIStoryboardSegue){
@@ -119,19 +138,14 @@ extension HerosListViewController: MKMapViewDelegate {
             annotationView.canShowCallout = true
         }
 
-        // Redimensiona la imagen al tamaño deseado
         let targetSize = CGSize(width: 80, height: 80)
         let resizedImage = resizeImage(heroAnnotation.image, targetSize: targetSize)
-
-        // Aplica una máscara de esquinas redondeadas a la imagen
         let roundedImage = roundedImage(resizedImage)
-
         annotationView.image = roundedImage
-
+        
         return annotationView
     }
 
-    //función para redimensionar las imagenes de las annotations
     func resizeImage(_ image: UIImage, targetSize: CGSize) -> UIImage {
         let size = image.size
 
@@ -154,7 +168,6 @@ extension HerosListViewController: MKMapViewDelegate {
         return newImage ?? UIImage()
     }
 
-    //función para aplicar una máscara de esquinas redondeadas a las imagenes de los annotations
     func roundedImage(_ image: UIImage) -> UIImage {
         let rect = CGRect(origin: .zero, size: image.size)
         UIGraphicsBeginImageContextWithOptions(image.size, false, 1.0)
@@ -192,6 +205,11 @@ extension HerosListViewController:HerosListViewControllerDelegate{
             herosAnnotations.forEach{ heroAnnotation in
                 self.mapView.addAnnotation(heroAnnotation)
             }
+        }
+    }
+    func showNavigationBar (){
+        DispatchQueue.main.async {
+            self.navigationController?.navigationBar.isHidden == true ? self.navigationController?.setNavigationBarHidden(false, animated: true) : nil
         }
     }
 }

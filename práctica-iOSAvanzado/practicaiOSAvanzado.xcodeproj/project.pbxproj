@@ -313,9 +313,9 @@
 		F1CDFF7E2B34D92300132C85 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
-				F158BDAF2B4E43F7009903F2 /* EntitiesTransformers */,
-				F112BCA02B4E1A8B00198E11 /* Entities */,
 				F1CDFF7F2B34D92D00132C85 /* Models */,
+				F112BCA02B4E1A8B00198E11 /* Entities */,
+				F158BDAF2B4E43F7009903F2 /* EntitiesTransformers */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
