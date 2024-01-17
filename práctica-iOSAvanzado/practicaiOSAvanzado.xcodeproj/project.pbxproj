@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F123C4BE2B57516D0083B42E /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = F123C4BD2B57516D0083B42E /* Notifications.swift */; };
 		F158BDB12B4E4426009903F2 /* UIImageTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F158BDB02B4E4426009903F2 /* UIImageTransformer.swift */; };
 		F158BDB82B4E5565009903F2 /* CellHeroDataEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F158BDB72B4E5565009903F2 /* CellHeroDataEntity.swift */; };
 		F158BDBA2B509AE8009903F2 /* HeroAnnotationEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F158BDB92B509AE8009903F2 /* HeroAnnotationEntity.swift */; };
@@ -57,6 +58,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F123C4BD2B57516D0083B42E /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		F158BDB02B4E4426009903F2 /* UIImageTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageTransformer.swift; sourceTree = "<group>"; };
 		F158BDB72B4E5565009903F2 /* CellHeroDataEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellHeroDataEntity.swift; sourceTree = "<group>"; };
 		F158BDB92B509AE8009903F2 /* HeroAnnotationEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroAnnotationEntity.swift; sourceTree = "<group>"; };
@@ -125,6 +127,14 @@
 				F158BDB92B509AE8009903F2 /* HeroAnnotationEntity.swift */,
 			);
 			path = Entities;
+			sourceTree = "<group>";
+		};
+		F123C4BC2B57514A0083B42E /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				F123C4BD2B57516D0083B42E /* Notifications.swift */,
+			);
+			path = Notifications;
 			sourceTree = "<group>";
 		};
 		F158BDAF2B4E43F7009903F2 /* EntitiesTransformers */ = {
@@ -316,6 +326,7 @@
 				F1CDFF7F2B34D92D00132C85 /* Models */,
 				F112BCA02B4E1A8B00198E11 /* Entities */,
 				F158BDAF2B4E43F7009903F2 /* EntitiesTransformers */,
+				F123C4BC2B57514A0083B42E /* Notifications */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -536,6 +547,7 @@
 				F158BDBA2B509AE8009903F2 /* HeroAnnotationEntity.swift in Sources */,
 				F1CDFF972B379D0A00132C85 /* DataBase.swift in Sources */,
 				F1CDFF2C2B349D2A00132C85 /* SceneDelegate.swift in Sources */,
+				F123C4BE2B57516D0083B42E /* Notifications.swift in Sources */,
 				F1CDFF922B35D58E00132C85 /* HerosListViewModel.swift in Sources */,
 				F158BDC32B51B8C0009903F2 /* HeroDetailViewController.swift in Sources */,
 				F158BDC52B51DE7E009903F2 /* HeroDetailViewModel.swift in Sources */,

@@ -105,10 +105,13 @@ final class HerosListViewModel{
                 }
                 
                 group.notify(queue: .main) {
-                    //updates the table view and add anotations to the mapkit
-                    self.viewController?.updateTable()
-                    self.viewController?.addAnnotationsToMapView(herosAnnotations: herosAnnotations)
-                    
+                    NotificationCenter.default.post(
+                        name: Notifications.UPDATE_VIEW_HERO_LIST.name,
+                        object: nil,
+                        userInfo: [
+                            "herosAnnotations":herosAnnotations
+                        ]
+                    )
                     
                     //save data in the context of data base and confirm the save of the data i the context
                     self.dataBase.saveCellHeroesDataToContext(cellHeroesData: self.cellHeroesData ?? [CellHeroData(name: "", description: "", image: UIImage())])
@@ -122,12 +125,17 @@ final class HerosListViewModel{
 
     func goWithCoreData(cellHeroesData: CellHeroesData,herosAnnotations: HerosAnnotations){
         self.cellHeroesData = cellHeroesData
+
+        NotificationCenter.default.post(
+            name: Notifications.UPDATE_VIEW_HERO_LIST.name,
+            object: nil,
+            userInfo: [
+                "herosAnnotations":herosAnnotations
+            ]
+        )
         
-        viewController?.updateTable()
-        viewController?.addAnnotationsToMapView(herosAnnotations: herosAnnotations)
-        
-        //dataBase.deleteAllCellHeroesData()
-        //dataBase.saveContext()
+       //dataBase.deleteAllCellHeroesData()
+       //dataBase.saveContext()
     }
 }
 

@@ -5,8 +5,6 @@ protocol HerosListViewControllerDelegate:AnyObject{
     func showNavigationBar()
     func navigateToLogin()
     func navigateToHeroDetail(cellHeroData: CellHeroData)
-    func updateTable()
-    func addAnnotationsToMapView(herosAnnotations:HerosAnnotations)
 }
 
 final class HerosListViewController:UIViewController{
@@ -18,6 +16,7 @@ final class HerosListViewController:UIViewController{
     override func viewDidLoad() {
         createAndAddLogOutIconButton()
         initView()
+        addObservers()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -39,14 +38,33 @@ final class HerosListViewController:UIViewController{
             iconButton.setImage(largeIconImage, for: .normal)
             iconButton.tintColor = UIColor.red
             iconButton.frame = CGRect(x: 0, y: 0, width: 10, height: 40)
-            iconButton.addTarget(self, action: #selector(logoutIconButonTouchedInside), for: .touchUpInside)
+            iconButton.addTarget(self, action: #selector(logoutIconButtonTouchedInside), for: .touchUpInside)
             let iconBarButtonItem = UIBarButtonItem(customView: iconButton)
             navigationItem.rightBarButtonItem = iconBarButtonItem
         }
     }
     
-    @objc func logoutIconButonTouchedInside(){
+    @objc func logoutIconButtonTouchedInside(){
         viewModel?.logoutIconButonTouched()
+    }
+    
+    //observers
+    func addObservers(){
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(updateView),
+            name: Notifications.UPDATE_VIEW_HERO_LIST.name,
+            object: nil)
+    }
+    @objc func updateView(_ notification: Notification){
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+            if let herosAnnotations = notification.userInfo?["herosAnnotations"] as? HerosAnnotations{
+                    herosAnnotations.forEach{ heroAnnotation in
+                        self.mapView.addAnnotation(heroAnnotation)
+                    }
+            }
+        }
     }
     
     func prepareForLoginSegue(segue: UIStoryboardSegue){
@@ -105,7 +123,7 @@ extension HerosListViewController: UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return cell(indexPath)
+        cell(indexPath)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -193,18 +211,6 @@ extension HerosListViewController:HerosListViewControllerDelegate{
     func navigateToHeroDetail(cellHeroData: CellHeroData) {
         DispatchQueue.main.async {
             self.performSegue(withIdentifier: "HerosListToHeroDetailSegue", sender: cellHeroData)
-        }
-    }
-    func updateTable() {
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
-    }
-    func addAnnotationsToMapView(herosAnnotations:HerosAnnotations){
-        DispatchQueue.main.async {
-            herosAnnotations.forEach{ heroAnnotation in
-                self.mapView.addAnnotation(heroAnnotation)
-            }
         }
     }
     func showNavigationBar (){
