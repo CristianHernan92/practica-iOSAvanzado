@@ -15,6 +15,7 @@
 		F158BDC32B51B8C0009903F2 /* HeroDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F158BDC22B51B8C0009903F2 /* HeroDetailViewController.swift */; };
 		F158BDC52B51DE7E009903F2 /* HeroDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F158BDC42B51DE7E009903F2 /* HeroDetailViewModel.swift */; };
 		F158BDCA2B53A01F009903F2 /* CellHeroData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F158BDC92B53A01F009903F2 /* CellHeroData.swift */; };
+		F15C754C2B58A0FE007A7903 /* HerosListViewControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15C754B2B58A0FE007A7903 /* HerosListViewControllerTest.swift */; };
 		F1B44DB32B4617000014EDA9 /* HerosListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1B44DB22B4617000014EDA9 /* HerosListCell.xib */; };
 		F1B44DB52B4617090014EDA9 /* HerosListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B44DB42B4617090014EDA9 /* HerosListCell.swift */; };
 		F1B44DB72B4621500014EDA9 /* HeroAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B44DB62B4621500014EDA9 /* HeroAnnotation.swift */; };
@@ -57,6 +58,7 @@
 		F158BDC22B51B8C0009903F2 /* HeroDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroDetailViewController.swift; sourceTree = "<group>"; };
 		F158BDC42B51DE7E009903F2 /* HeroDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroDetailViewModel.swift; sourceTree = "<group>"; };
 		F158BDC92B53A01F009903F2 /* CellHeroData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellHeroData.swift; sourceTree = "<group>"; };
+		F15C754B2B58A0FE007A7903 /* HerosListViewControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HerosListViewControllerTest.swift; sourceTree = "<group>"; };
 		F1B44DB22B4617000014EDA9 /* HerosListCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HerosListCell.xib; sourceTree = "<group>"; };
 		F1B44DB42B4617090014EDA9 /* HerosListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HerosListCell.swift; sourceTree = "<group>"; };
 		F1B44DB62B4621500014EDA9 /* HeroAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroAnnotation.swift; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 			isa = PBXGroup;
 			children = (
 				F1CDFF432B349D2C00132C85 /* CoreDataTest.swift */,
+				F15C754B2B58A0FE007A7903 /* HerosListViewControllerTest.swift */,
 			);
 			path = "práctica-iOSAvanzadoTests";
 			sourceTree = "<group>";
@@ -501,6 +504,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F1CDFF442B349D2C00132C85 /* CoreDataTest.swift in Sources */,
+				F15C754C2B58A0FE007A7903 /* HerosListViewControllerTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
