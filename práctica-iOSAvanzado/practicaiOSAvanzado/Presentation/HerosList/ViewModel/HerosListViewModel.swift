@@ -141,11 +141,11 @@ final class HerosListViewModel{
 
 extension HerosListViewModel:HerosListViewModelProtocol{
     func onViewWillApear(){
-        //show navigationBar
-        viewController?.showNavigationBar()
-        
         //verify keychain
         if keychain.getToken() != nil{
+            //show navigationBar
+            viewController?.showNavigationBar()
+            
             if (self.cellHeroesData == nil){
                 if let cellHeroesData = dataBase.getAllCellHeroesData(), !cellHeroesData.isEmpty,
                    let herosAnnotations = dataBase.getAllHerosAnnotations(), !herosAnnotations.isEmpty{

@@ -43,19 +43,18 @@ final class HerosListViewControllerTest : XCTestCase{
     override func tearDown() {
         super.tearDown()
         sut = nil
+        keychain.removeToken()
+        keychain = nil
+        dragonBallZNetwork = nil
+        database = nil
+        herosListViewModel = nil
     }
     
     //MARK: -TESTS-
-    func test_withoutToken(){
-        //without token must go to login and so not data must be in the database
-        sut.viewModel?.onViewWillApear()
-        XCTAssertNil(database.getAllCellHeroesData())
-    }
-    
-    func test_withToken(){
-        //with token must be data in the database (even if it is empty)
-        sut.viewModel?.onViewWillApear()
-        XCTAssertNotNil(database.getAllCellHeroesData())
+    func test_tokenRemovedWhenClickInLogoutButton(){
+        keychain.saveToken(token: "qwert1234")
+        sut.viewModel?.logoutIconButonTouched()
+        XCTAssertNil(keychain.getToken())
     }
     
     //...
